@@ -29,6 +29,11 @@ function! s:outputter.finish(session)
   let saved = g:openbrowser_open_filepath_in_vim
   try
     let g:openbrowser_open_filepath_in_vim = 0
+
+    if (has('win32') || has('win64')) && self._file =~ "\\"
+      let self._file = substitute(self._file, '\', "/", "g")
+    endif
+
     call openbrowser#open(self._file)
   finally
     let g:openbrowser_open_filepath_in_vim = saved
